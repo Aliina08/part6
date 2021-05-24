@@ -81,19 +81,30 @@ $(".tabs a span").toArray().forEach(function (element) {
 			$tagInput = $("<input>").addClass("tags"),
 			$tagLabel = $("<p>").text("Тэги: "),
 			$button = $("<span>").text("+");
+		$("main .content").append($inputLabel).append($input).append($tagLabel).append($tagInput).append($button);
 		$button.on("click", function () {
 			var description = $input.val(),
 			// разделение в соответствии с запятыми
-			tags = $tagInput.val().split(",");
-			toDoObjects.push({"description":description, "tags":tags});
-			// обновление toDos
+			tags = $tagInput.val().split(","),
+			newToDo = {"description":description, "tags":tags};
+			// здесь мы отправляем быстрое сообщение на маршрут списка задач
+			$.post("todos", newToDo, function (response) {
+			// этот обратный вызов выполняется при ответе сервера
+			//console.log("Мы отправили данные и получили ответ сервера!");
+			console.log(response);
+			// нужно отправить новый объект на клиент
+			// после получения ответа сервера
+			toDoObjects.push(newToDo);
+			//Обновление toDos
 			toDos = toDoObjects.map(function (toDo) {
 				return toDo.description;
 			});
 			$input.val("");
 			$tagInput.val("");
+			$(".tabs a:first-child span").trigger("click");
 		});
-		$("main .content").append($inputLabel).append($input).append($tagLabel).append($tagInput).append($button);
+		});
+		
 	}
 	return false;
 })
