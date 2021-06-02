@@ -58,8 +58,19 @@ ToDosController.create = function (req, res) {
 };
 // Обновить существующего пользователя
 ToDosController.update = function (req, res) {
-console.log("вызвано действие: обновить");
-res.send(200);
+	var id = req.params.id;
+	var newDescription = {$set: {description: req.body.description}};
+	ToDo.updateOne({"_id": id}, newDescription, function (err,todo) {
+		if (err !== null) {
+			res.status(500).json(err);
+		} else {
+			if (todo.n === 1 && todo.nModified === 1 && todo.ok === 1) {
+				res.status(200).json(todo);
+			} else {
+				res.status(404).json({"status": 404});
+			}
+		}
+	});
 };
 // Удалить существующего пользователя
 ToDosController.destroy = function (req, res) {
