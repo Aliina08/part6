@@ -3,6 +3,24 @@ var User = require("../models/user.js"),
 	mongoose = require("mongoose");
 var UsersController = {};
 
+// проверка, не существует ли уже пользователь
+User.find({}, function (err, result) {
+if (err !== null) {
+console.log("Что-то идет не так");
+console.log(err);
+} else if (result.length === 0) {
+console.log("Создание тестового пользователя...");
+var exampleUser = new User({"username":"usertest"});
+exampleUser.save(function (err, result) {
+if (err) {
+console.log(err);
+} else {
+console.log("Тестовый пользователь сохранен");
+}
+});
+}
+});
+
 UsersController.index = function (req, res) {
 console.log("вызвано действие: индекс");
 res.send(200);
@@ -27,22 +45,7 @@ UsersController.destroy = function (req, res) {
 console.log("destroy action called");
 res.send(200);
 };
-module.exports = UsersController;
 
-// проверка, не существует ли уже пользователь
-User.find({}, function (err, result) {
-if (err !== null) {
-console.log("Что-то идет не так");
-console.log(err);
-} else if (result.length === 0) {
-console.log("Создание тестового пользователя...");
-var exampleUser = new User({"username":"usertest"});
-exampleUser.save(function (err, result) {
-if (err) {
-console.log(err);
-} else {
-console.log("Тестовый пользователь сохранен");
-}
-});
-}
-});
+
+
+module.exports = UsersController;
