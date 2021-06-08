@@ -29,7 +29,7 @@ var organizeByTags = function (toDoObjects) {
 	return tagObjects;
 };
 
-var liaWithDeleteOnClick = function(todo) {
+var liaWithDeleteOnClick = function(todo, callback) {
 	var $todoListItem = $("<li>").text(todo.description),
 		$todoRemoveLink = $("<a>").attr("href", "todos/" + todo._id);
 	$todoRemoveLink.text("Удалить");
@@ -56,7 +56,7 @@ var liaWithEditOnClick = function (todo) {
 		$todoRemoveLink = $("<a>").attr("href", "todos/" + todo._id);
 		$todoRemoveLink.text("Редактировать");
 		$todoRemoveLink.on("click", function() {
-		var newDescription = prompt("Введите новое наименование для задачи", todo.description);
+	var newDescription = prompt("Введите новое наименование для задачи", todo.description);
 		if (newDescription !== null && newDescription.trim() !== "") {
 			$.ajax({
 				"url": "/todos/" + todo._id,
@@ -83,7 +83,6 @@ var main = function (toDoObjects) {
 		// этой задачи
 		return toDo.description;
 	});
-	
 	// создание пустого массива с вкладками 
 	var tabs = [];
 
@@ -100,7 +99,7 @@ var main = function (toDoObjects) {
 					$content.append($todoListItem);
 				}
 	   			// return $content;
-	   			callback(null,$content);
+	   			callback(null, $content);
    			}).fail(function (jqXHR, textStatus, error) {
    				   // в этом случае мы отправляем ошибку вместе с null для $content
 				callback(error, null);
@@ -146,7 +145,7 @@ var main = function (toDoObjects) {
 					$("main .content").append($tagName);
 					$("main .content").append($content);
 				});
-				callback(null,$content);
+				callback(null, $content);
 			}).fail(function (jqXHR, textStatus, error) {
 				// в этом случае мы отправляем ошибку вместе с null для $content
 				callback(error, null);
@@ -161,11 +160,11 @@ var main = function (toDoObjects) {
 			$.get("todos.json", function (toDoObjects) {	
 				// создание $content для Добавить 
 				var $input = $("<input>").addClass("description"), 
-					$textInput = $("<p>").text("Введите новую задачу: "),
-					$tagInput = $("<input>").addClass("tags"),
-					$tagLabel = $("<p>").text("Тэги: "),
-					$button = $("<button>").text("+");
-				$("main .content").append($textInput).append($input).append($tagLabel).append($tagInput).append($button); 
+				$textInput = $("<p>").text("Введите новую задачу: "),
+				$tagInput = $("<input>").addClass("tags"),
+				$tagLabel = $("<p>").text("Тэги: "),
+				$button = $("<button>").text("+");
+				$("main .content").append($textInput).append($input).append($tagLabel).append($tagInput).append($button);
 				function btnfunc() {
 					var description = $input.val(),
 						tags = $tagInput.val().split(","),

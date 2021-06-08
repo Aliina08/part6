@@ -7,10 +7,11 @@ UsersController = require("./controllers/users_controller.js"),
 app = express();
 // Это модель Mongoose для задач
 
-
 // начинаем слушать запросы
 http.createServer(app).listen(3000);
 
+app.use('/', express.static(__dirname + '/client'));
+app.use('/user/:username', express.static(__dirname + '/client'));
 // командуем Express принять поступающие
 // объекты JSON
 app.use(express.urlencoded({ extended: true }));
@@ -37,10 +38,7 @@ app.post("/todos", ToDosController.create);
 app.put("/todos/:id", ToDosController.update);
 app.delete("/todos/:id", ToDosController.destroy);
 
-app.get("/user/:username/todos.json", ToDosController.index);
-app.post("/user/:username/todos", ToDosController.create);
-app.put("/user/:username/todos/:id", ToDosController.update);
-app.delete("/user/:username/todos/:id", ToDosController.destroy);
-
-app.use('/', express.static(__dirname + '/client'));
-app.use('/user/:username', express.static(__dirname + '/client'));
+app.get("/users/:username/todos.json", ToDosController.index);
+app.post("/users/:username/todos", ToDosController.create);
+app.put("/users/:username/todos/:id", ToDosController.update);
+app.delete("/users/:username/todos/:id", ToDosController.destroy);
